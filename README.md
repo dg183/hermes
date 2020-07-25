@@ -40,14 +40,15 @@ Time complexity
 * assuming 5 suburbs with equal destinations
 * Total number of addresses = `n`
 
-Single CSV |  | Separated by suburb
---- | --- |---
-`O(n^2)` | | `O(5*(n/5)^2) = O(n^2/5)`
+Single CSV | Separated by suburb
+--- | ---
+`O(n^2)` | `O(5*(n/5)^2) = O(n^2/5)`
 
 For 100 addresses,
-Single CSV |  | Separated by suburb
---- | --- |---
-`O(100^2) = O(10,000)` | | `O(100^2/5) = O(2,000)`
+
+Single CSV | Separated by suburb
+--- | ---
+`O(100^2) = O(10,000)` | `O(100^2/5) = O(2,000)`
 
 **Much more worth to separate by suburb with multiple smaller CSV's.**
 
@@ -72,3 +73,52 @@ Each query sent to the Distance Matrix API generates elements, where the number 
 * Maximum of 100 elements per server-side request
 * Maximum of 100 elements per client-side request
 * 1000 elements per second (EPS), calculated as the sum of client-side and server-side queries
+
+
+# Functions
+
+## get_addresses_str(filename)
+Input: Path to file (e.g. `addresses/blacktown.csv`)
+
+Output: String formatted for `destinations` parameter of Distance Matrix API (e.g. `123+Cherry+St.+Chazza+NSW+1234|456+Parrot+Land,+Wakeley+8421|54+Monkey+Road,+Wahoo,+NSW,+124|`)
+
+## addresses_list_to_str(addr_list)
+**Called by get_addresses_str()**
+
+Input: List of addresses
+
+Output: String formatted for `destinations` parameter of Distance Matrix API
+
+## print_matrix(api_response)
+Input: Response from Distance Matrix API
+
+Output (**To stdout**): Matrix of paths between each node (with distance and duration)
+
+## matrix_by_time(api_response)
+Input: Response from Distance Matrix API
+
+Output: 2D list of travel time between each node
+
+## matrix_by_distance(api_response)
+Input: Response from Distance Matrix API
+
+Output: 2D list of travel distance between each node
+
+## find_path(addresses)
+Queries the Distance Matrix API given string-formatted addresses.
+
+Query chooses to avoid tolls
+```
+params = urllib.parse.urlencode(
+    {
+        "origins" : addresses,
+        "destinations" : addresses,
+        "key" : API_KEY,
+        "avoid" : "tolls"
+    }
+)
+```
+
+Input: Address string formatted for `destinations` paramater of Distance Matrix API
+
+Output: Response from Distance Matrix API
