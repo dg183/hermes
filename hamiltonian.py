@@ -5,6 +5,8 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import sys
+from graph import *
+
 
 # Get API key
 API_KEY = os.environ.get("API_KEY_HERMES",'')
@@ -41,6 +43,11 @@ def main():
     print("==== matrix by distance (metres) ====")
     print(matrix_by_distance(find_path_return))
     print("==== ==================== ====")
+    
+    G1 = Graph(len(find_path_return["destination_addresses"]))
+    G1.graph = matrix_by_distance(find_path_return)
+    G1.hamCycle()
+    
 
     
     print("Laters.")

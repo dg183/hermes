@@ -12,8 +12,9 @@ To run:
     * ~~Multiple CSV files, separated by suburb~~
     * ~~CSV files should be passed in as a command line argument~~
 * ~~Parse input to fit api call~~
-* Process API response to create 2d weighted graph (distances and locations from API response)
+* ~~Process API response to create 2d weighted graph (distances and locations from API response)~~
 * Find Hamiltonian circuit of each suburb
+    * Put hamiltonian functions in separate file?
 * Check results by hand
 
 
