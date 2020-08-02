@@ -23,31 +23,128 @@ class Graph():
                 return False
   
         return True
-        
+
+    # need to make dictionary
+    # key = node/vertex number (int)
+    # value = list (of edges)
+    # list will be sorted
+
+    # make sorted list of all edges
+    # apply in ascending order until circuit made 
     def solve(self):
-        # make sorted list of all edges
-        # apply in ascending order until circuit made
         
-        edges = []
-        
-        row_count = 0
+        visited = {0}
+        # empty path of length 'V'
+        path = [-1] * self.V
+
+        # set first vertex in path as our first address
+        v_origin = self.addresses[0]
+        path[0] = 0
+
+        # create dict of mapping int:list
+        sorted_edges = {}
+        for i in range(self.V):
+            sorted_edges[i] = []
+
+        print("====== sorted edges =======")
+        print(sorted_edges)
+        print("========================")
+
+        # place each edge into dict where it belongs
+        # row_count = 0
+
+        row_count_src = 0
         for row in self.graph:
-            col_count = 0
-            for col in row:
-                edges.append(Edge(row_count,col_count,col))
+            col_count_dest = 0
+            for weight in row:
+                if weight == 0:
+                    col_count_dest += 1
+                    continue
+                sorted_edges[row_count_src].append(Edge(row_count_src,col_count_dest,weight))
+                col_count_dest += 1
+            row_count_src += 1
+
+
+        # sort edges in increasing order
+        for src in sorted_edges:
+            sorted_edges[src] = sorted(sorted_edges[src], key=lambda edge:edge.weight)
+        
+        
+        print("====== sorted edges AFTER SORT =======")
+        print(sorted_edges)
+        print("========================")
+        # print(edges)
+        # edges = sorted(edges, key=lambda edge:edge.weight)
+        # print(edges)
+        # ===== solve for path =====
+
+        # while circuit not made, keep looping
+        # for edge in edges:
+            
+        #     if edge.source not in visited and edge.de
+
+        pos = 0
+        # while path isn't complete
+        while pos < self.V - 1:
+            # print("============ pos = {} != self.V ({})=======",pos,self.V)
+            # search through edges connected to node
+            for edge in sorted_edges[path[pos]]:
                 
-                col_count += 1
+
+                # the first destination we see that hasn't been visited
+                # will be the closest possible destination
+                if edge.destination not in visited:
+                    # add to path
+                    path[pos + 1] = edge.destination
+                    pos += 1
+                    print("Added")
+                    print(edge)
+                    visited.add(edge.destination)
+                    break
                 
-            row_count += 1
-                
-                
-        print(edges)
-        edges = sorted(edges, key=lambda edge:edge.weight)
-        print(edges)
+
+
+
+        # recurse for path
+        # if self.solveUtil(path,1) == False:
+        #     print('Solution does not exist\n')
+        #     return False
+
+        
+
+        # =============================
+
+
+        self.printSolution(path)
+        return path
+        # ============ END HERE
+
+        
         
         # weight = col["distance"]["value"]
         # matrix[row_count][col_count] = Edge(addresses[row_count],addresses[col_count],weight)
   
+    # Recursive utility function for solve()
+    def solveUtil(self, path, pos):
+
+        # base case: if all vertices are included in path
+        if pos == self.V:
+            # last vertex must be adjacent to first to be cycle
+            if self.graph[ path[pos-1] ][ path[0] ] == 1:
+                return True
+            else:
+                return False
+
+        # try different vertices to be next in path
+        # don't try 0 because 0 is known origin
+        for v in range(1, self.V):
+
+            # if vertex is a possible candidate
+            if self.isSafe(v, pos, path) == True:
+                path[pos] = v
+
+
+
     # A recursive utility function to solve  
     # hamiltonian cycle problem  
     def hamCycleUtil(self, path, pos):  

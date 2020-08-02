@@ -48,11 +48,15 @@ def main():
     # G1.graph = matrix_by_distance(find_path_return)
     G1.graph = matrix_by_time(find_path_return)
     # G1.hamCycle()
-    G1.solve()
+
+    path = G1.solve()
     
+    # print_final_route(path,find_path_return)
 
     
     print("Laters.")
+
+
 
 
 # Given path to a csv file, this function will return the parameter string for destination nodes
