@@ -83,6 +83,8 @@ class Graph():
             
         #     if edge.source not in visited and edge.de
 
+        trip_time = 0
+        # trip_dist = 0
         pos = 0
         # while path isn't complete
         while pos < self.V - 1:
@@ -95,13 +97,24 @@ class Graph():
                 # will be the closest possible destination
                 if edge.destination not in visited:
                     # add to path
-                    path[pos + 1] = edge.destination
                     pos += 1
+                    path[pos] = edge.destination
+                    
+                    # add to visited
+                    visited.add(edge.destination)
+
+                    # log time
+                    trip_time += edge.weight
+
                     print("Added")
                     print(edge)
-                    visited.add(edge.destination)
                     break
                 
+        # add trip time from last to first
+        for edge in sorted_edges[path[pos]]:
+            if edge.destination == 0:
+                trip_time += edge.weight
+                break
 
 
 
@@ -116,7 +129,7 @@ class Graph():
 
 
         self.printSolution(path)
-        return path
+        return (path, trip_time)
         # ============ END HERE
 
         
