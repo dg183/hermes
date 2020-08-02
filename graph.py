@@ -1,11 +1,12 @@
 # Python program for solution of  
 # hamiltonian cycle problem  
-  
+from sortededges import *
 class Graph():  
-    def __init__(self, vertices):  
-        self.graph = [[0 for column in range(vertices)] 
-                            for row in range(vertices)]  
-        self.V = vertices  
+    def __init__(self, addresses):  
+        self.V = len(addresses)  
+        self.graph = [[0 for column in range(self.V)] 
+                            for row in range(self.V)]  
+        self.addresses = addresses
   
     ''' Check if this vertex is an adjacent vertex  
         of the previously added vertex and is not  
@@ -22,6 +23,30 @@ class Graph():
                 return False
   
         return True
+        
+    def solve(self):
+        # make sorted list of all edges
+        # apply in ascending order until circuit made
+        
+        edges = []
+        
+        row_count = 0
+        for row in self.graph:
+            col_count = 0
+            for col in row:
+                edges.append(Edge(row_count,col_count,col))
+                
+                col_count += 1
+                
+            row_count += 1
+                
+                
+        print(edges)
+        edges = sorted(edges, key=lambda edge:edge.weight)
+        print(edges)
+        
+        # weight = col["distance"]["value"]
+        # matrix[row_count][col_count] = Edge(addresses[row_count],addresses[col_count],weight)
   
     # A recursive utility function to solve  
     # hamiltonian cycle problem  

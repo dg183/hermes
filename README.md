@@ -19,7 +19,12 @@ To run:
 
 
 # Notes
-### API time complexity
+## Project requirements
+Drivers will depart from home and travel to each address within their surrounding suburb.
+
+Optimal path will be the path with shortest travel time. This path must create a circuit with the driver's home as the start and end location, passing through every delivery address at least once.
+
+## API time complexity
 Given a list of `origins` and `destinations`, the API will return an array of distances between from each origin to each destination.
 
     * array of size `origins` x `destinations` 
