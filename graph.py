@@ -38,7 +38,7 @@ class Graph():
         path = [-1] * self.V
 
         # set first vertex in path as our first address
-        v_origin = self.addresses[0]
+        # v_origin = self.addresses[0]
         path[0] = 0
 
         # create dict of mapping int:list
@@ -46,9 +46,9 @@ class Graph():
         for i in range(self.V):
             sorted_edges[i] = []
 
-        print("====== sorted edges =======")
-        print(sorted_edges)
-        print("========================")
+        # print("====== sorted edges =======")
+        # print(sorted_edges)
+        # print("========================")
 
         # place each edge into dict where it belongs
         # row_count = 0
@@ -70,9 +70,9 @@ class Graph():
             sorted_edges[src] = sorted(sorted_edges[src], key=lambda edge:edge.weight)
         
         
-        print("====== sorted edges AFTER SORT =======")
-        print(sorted_edges)
-        print("========================")
+        # print("====== sorted edges AFTER SORT =======")
+        # print(sorted_edges)
+        # print("========================")
         # print(edges)
         # edges = sorted(edges, key=lambda edge:edge.weight)
         # print(edges)
@@ -106,15 +106,15 @@ class Graph():
                     # log time
                     trip_time += edge.weight
 
-                    print("Added")
-                    print(edge)
+                    # print("Added")
+                    # print(edge)
                     break
                 
         # add trip time from last to first
-        for edge in sorted_edges[path[pos]]:
-            if edge.destination == 0:
-                trip_time += edge.weight
-                break
+        # for edge in sorted_edges[path[pos]]:
+        #     if edge.destination == 0:
+        #         trip_time += edge.weight
+        #         break
 
 
 
@@ -128,7 +128,7 @@ class Graph():
         # =============================
 
 
-        self.printSolution(path)
+        # self.printSolution(path)
         return (path, trip_time)
         # ============ END HERE
 
