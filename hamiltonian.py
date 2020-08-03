@@ -6,6 +6,7 @@ import urllib.parse
 import urllib.request
 import sys
 from graph import *
+import csv
 
 # ============== Helper func for displaying time
 intervals = (
@@ -33,6 +34,19 @@ def display_time(seconds, granularity=2):
 API_KEY = os.environ.get("API_KEY_HERMES",'')
 DIST_MATRIX_BASE_URL = "https://maps.googleapis.com/maps/api/distancematrix/json"
 
+
+# key mappings
+i_name = 0
+i_zid = 1
+i_email = 2
+i_phone = 3
+i_order_beige = 4
+i_order_rose = 5
+i_order_shirt = 6
+i_order_champ = 7
+i_address = 8
+i_suburb = 9
+db = {}
 # Required paramaters
     # origins
     # destinations
@@ -46,17 +60,97 @@ def main():
     filename = sys.argv[1]
     
     
+    
     # read file and get addresses
-    addresses_str = get_addresses_str(filename)
+    addresses_str,addresses_list = get_addresses_str(filename)
+    
+    print(addresses_list)
         
     find_path_return = find_path(addresses_str)
+    # find_path_return = {'destination_addresses': ['9 Lorikeet St, Glenwood NSW 2768, Australia', '3 Gympie Pl, Wakeley NSW 2176, Australia', 'Shop+8/45-47 Smart St, Fairfield NSW 2165, Australia', '80 Melbourne Rd, St Johns Park NSW 2176, Australia'], 'origin_addresses': ['9 Lorikeet St, Glenwood NSW 2768, Australia', '3 Gympie Pl, Wakeley NSW 2176, Australia', 'Shop+8/45-47 Smart St, Fairfield NSW 2165, Australia', '80 Melbourne Rd, St Johns Park NSW 2176, Australia'], 'rows': [{'elements': [{'distance': {'text': '1 m', 'value': 0}, 'duration': {'text': '1 min', 'value': 0}, 'status': 'OK'}, {'distance': {'text': '28.9 km', 'value': 28879}, 'duration': {'text': '28 mins', 'value': 1706}, 'status': 'OK'}, {'distance': {'text': '20.7 km', 'value': 20675}, 'duration': {'text': '32 mins', 'value': 1914}, 'status': 'OK'}, {'distance': {'text': '31.1 km', 'value': 31065}, 'duration': {'text': '28 mins', 'value': 1668}, 'status': 'OK'}]}, {'elements': [{'distance': {'text': '28.4 km', 'value': 28427}, 'duration': {'text': '28 mins', 'value': 1700}, 'status': 'OK'}, {'distance': {'text': '1 m', 'value': 0}, 'duration': {'text': '1 min', 'value': 0}, 'status': 'OK'}, {'distance': {'text': '6.1 km', 'value': 6083}, 'duration': {'text': '11 mins', 'value': 653}, 'status': 'OK'}, {'distance': {'text': '2.3 km', 'value': 2331}, 'duration': {'text': '5 mins', 'value': 285}, 'status': 'OK'}]}, {'elements': [{'distance': {'text': '19.9 km', 'value': 19869}, 'duration': {'text': '32 mins', 'value': 1891}, 'status': 'OK'}, {'distance': {'text': '6.1 km', 'value': 6081}, 'duration': {'text': '11 mins', 'value': 660}, 'status': 'OK'}, {'distance': {'text': '1 m', 'value': 0}, 'duration': {'text': '1 min', 'value': 0}, 'status': 'OK'}, {'distance': {'text': '6.9 km', 'value': 6869}, 'duration': {'text': '13 mins', 'value': 759}, 'status': 'OK'}]}, {'elements': [{'distance': {'text': '31.3 km', 'value': 31346}, 'duration': {'text': '29 mins', 'value': 1723}, 'status': 'OK'}, {'distance': {'text': '2.5 km', 'value': 2516}, 'duration': {'text': '5 mins', 'value': 277}, 'status': 'OK'}, {'distance': {'text': '6.9 km', 'value': 6856}, 'duration': {'text': '12 mins', 'value': 737}, 'status': 'OK'}, {'distance': {'text': '1 m', 'value': 0}, 'duration': {'text': '1 min', 'value': 0}, 'status': 'OK'}]}], 'status': 'OK'}
+    # find_path_return = {'destination_addresses': ['9 Lorikeet St, Glenwood NSW 2768, Australia', '3 Gympie Pl, Wakeley NSW 2176, Australia', 'Shop+8/45-47 Smart St, Fairfield NSW 2165, Australia', '80 Melbourne Rd, St Johns Park NSW 2176, Australia'], 'origin_addresses': ['9 Lorikeet St, Glenwood NSW 2768, Australia', '3 Gympie Pl, Wakeley NSW 2176, Australia', 'Shop+8/45-47 Smart St, Fairfield NSW 2165, Australia', '80 Melbourne Rd, St Johns Park NSW 2176, Australia'], 'rows': [{'elements': [{'distance': {'text': '1 m', 'value': 0}, 'duration': {'text': '1 min', 'value': 0}, 'status': 'OK'}, {'distance': {'text': '19.0 km', 'value': 19007}, 'duration': {'text': '31 mins', 'value': 1886}, 'status': 'OK'}, {'distance': {'text': '20.7 km', 'value': 20675}, 'duration': {'text': '32 mins', 'value': 1914}, 'status': 'OK'}, {'distance': {'text': '20.5 km', 'value': 20531}, 'duration': {'text': '34 mins', 'value': 2035}, 'status': 'OK'}]}, {'elements': [{'distance': {'text': '19.0 km', 'value': 18985}, 'duration': {'text': '32 mins', 'value': 1931}, 'status': 'OK'}, {'distance': {'text': '1 m', 'value': 0}, 'duration': {'text': '1 min', 'value': 0}, 'status': 'OK'}, {'distance': {'text': '6.1 km', 'value': 6083}, 'duration': {'text': '11 mins', 'value': 653}, 'status': 'OK'}, {'distance': {'text': '2.3 km', 'value': 2331}, 'duration': {'text': '5 mins', 'value': 285}, 'status': 'OK'}]}, {'elements': [{'distance': {'text': '19.9 km', 'value': 19869}, 'duration': {'text': '32 mins', 'value': 1891}, 'status': 'OK'}, {'distance': {'text': '6.1 km', 'value': 6081}, 'duration': {'text': '11 mins', 'value': 660}, 'status': 'OK'}, {'distance': {'text': '1 m', 'value': 0}, 'duration': {'text': '1 min', 'value': 0}, 'status': 'OK'}, {'distance': {'text': '6.9 km', 'value': 6869}, 'duration': {'text': '13 mins', 'value': 759}, 'status': 'OK'}]}, {'elements': [{'distance': {'text': '20.8 km', 'value': 20834}, 'duration': {'text': '35 mins', 'value': 2077}, 'status': 'OK'}, {'distance': {'text': '2.5 km', 'value': 2516}, 'duration': {'text': '5 mins', 'value': 277}, 'status': 'OK'}, {'distance': {'text': '6.9 km', 'value': 6856}, 'duration': {'text': '12 mins', 'value': 737}, 'status': 'OK'}, {'distance': {'text': '1 m', 'value': 0}, 'duration': {'text': '1 min', 'value': 0}, 'status': 'OK'}]}], 'status': 'OK'}
 
     if find_path_return['status'] != 'OK':
         print("Error: ", find_path_return['status'])
         exit(1)
-    # find_path_return = {'destination_addresses': ['9 Lorikeet St, Glenwood NSW 2768, Australia', '3 Gympie Pl, Wakeley NSW 2176, Australia', 'Shop+8/45-47 Smart St, Fairfield NSW 2165, Australia', '80 Melbourne Rd, St Johns Park NSW 2176, Australia'], 'origin_addresses': ['9 Lorikeet St, Glenwood NSW 2768, Australia', '3 Gympie Pl, Wakeley NSW 2176, Australia', 'Shop+8/45-47 Smart St, Fairfield NSW 2165, Australia', '80 Melbourne Rd, St Johns Park NSW 2176, Australia'], 'rows': [{'elements': [{'distance': {'text': '1 m', 'value': 0}, 'duration': {'text': '1 min', 'value': 0}, 'status': 'OK'}, {'distance': {'text': '28.9 km', 'value': 28879}, 'duration': {'text': '28 mins', 'value': 1706}, 'status': 'OK'}, {'distance': {'text': '20.7 km', 'value': 20675}, 'duration': {'text': '32 mins', 'value': 1914}, 'status': 'OK'}, {'distance': {'text': '31.1 km', 'value': 31065}, 'duration': {'text': '28 mins', 'value': 1668}, 'status': 'OK'}]}, {'elements': [{'distance': {'text': '28.4 km', 'value': 28427}, 'duration': {'text': '28 mins', 'value': 1700}, 'status': 'OK'}, {'distance': {'text': '1 m', 'value': 0}, 'duration': {'text': '1 min', 'value': 0}, 'status': 'OK'}, {'distance': {'text': '6.1 km', 'value': 6083}, 'duration': {'text': '11 mins', 'value': 653}, 'status': 'OK'}, {'distance': {'text': '2.3 km', 'value': 2331}, 'duration': {'text': '5 mins', 'value': 285}, 'status': 'OK'}]}, {'elements': [{'distance': {'text': '19.9 km', 'value': 19869}, 'duration': {'text': '32 mins', 'value': 1891}, 'status': 'OK'}, {'distance': {'text': '6.1 km', 'value': 6081}, 'duration': {'text': '11 mins', 'value': 660}, 'status': 'OK'}, {'distance': {'text': '1 m', 'value': 0}, 'duration': {'text': '1 min', 'value': 0}, 'status': 'OK'}, {'distance': {'text': '6.9 km', 'value': 6869}, 'duration': {'text': '13 mins', 'value': 759}, 'status': 'OK'}]}, {'elements': [{'distance': {'text': '31.3 km', 'value': 31346}, 'duration': {'text': '29 mins', 'value': 1723}, 'status': 'OK'}, {'distance': {'text': '2.5 km', 'value': 2516}, 'duration': {'text': '5 mins', 'value': 277}, 'status': 'OK'}, {'distance': {'text': '6.9 km', 'value': 6856}, 'duration': {'text': '12 mins', 'value': 737}, 'status': 'OK'}, {'distance': {'text': '1 m', 'value': 0}, 'duration': {'text': '1 min', 'value': 0}, 'status': 'OK'}]}], 'status': 'OK'}
-    # find_path_return = {'destination_addresses': ['9 Lorikeet St, Glenwood NSW 2768, Australia', '3 Gympie Pl, Wakeley NSW 2176, Australia', 'Shop+8/45-47 Smart St, Fairfield NSW 2165, Australia', '80 Melbourne Rd, St Johns Park NSW 2176, Australia'], 'origin_addresses': ['9 Lorikeet St, Glenwood NSW 2768, Australia', '3 Gympie Pl, Wakeley NSW 2176, Australia', 'Shop+8/45-47 Smart St, Fairfield NSW 2165, Australia', '80 Melbourne Rd, St Johns Park NSW 2176, Australia'], 'rows': [{'elements': [{'distance': {'text': '1 m', 'value': 0}, 'duration': {'text': '1 min', 'value': 0}, 'status': 'OK'}, {'distance': {'text': '19.0 km', 'value': 19007}, 'duration': {'text': '31 mins', 'value': 1886}, 'status': 'OK'}, {'distance': {'text': '20.7 km', 'value': 20675}, 'duration': {'text': '32 mins', 'value': 1914}, 'status': 'OK'}, {'distance': {'text': '20.5 km', 'value': 20531}, 'duration': {'text': '34 mins', 'value': 2035}, 'status': 'OK'}]}, {'elements': [{'distance': {'text': '19.0 km', 'value': 18985}, 'duration': {'text': '32 mins', 'value': 1931}, 'status': 'OK'}, {'distance': {'text': '1 m', 'value': 0}, 'duration': {'text': '1 min', 'value': 0}, 'status': 'OK'}, {'distance': {'text': '6.1 km', 'value': 6083}, 'duration': {'text': '11 mins', 'value': 653}, 'status': 'OK'}, {'distance': {'text': '2.3 km', 'value': 2331}, 'duration': {'text': '5 mins', 'value': 285}, 'status': 'OK'}]}, {'elements': [{'distance': {'text': '19.9 km', 'value': 19869}, 'duration': {'text': '32 mins', 'value': 1891}, 'status': 'OK'}, {'distance': {'text': '6.1 km', 'value': 6081}, 'duration': {'text': '11 mins', 'value': 660}, 'status': 'OK'}, {'distance': {'text': '1 m', 'value': 0}, 'duration': {'text': '1 min', 'value': 0}, 'status': 'OK'}, {'distance': {'text': '6.9 km', 'value': 6869}, 'duration': {'text': '13 mins', 'value': 759}, 'status': 'OK'}]}, {'elements': [{'distance': {'text': '20.8 km', 'value': 20834}, 'duration': {'text': '35 mins', 'value': 2077}, 'status': 'OK'}, {'distance': {'text': '2.5 km', 'value': 2516}, 'duration': {'text': '5 mins', 'value': 277}, 'status': 'OK'}, {'distance': {'text': '6.9 km', 'value': 6856}, 'duration': {'text': '12 mins', 'value': 737}, 'status': 'OK'}, {'distance': {'text': '1 m', 'value': 0}, 'duration': {'text': '1 min', 'value': 0}, 'status': 'OK'}]}], 'status': 'OK'}
+        
+    # correspond human inputted addresses with google maps version
+    # when we get response from API, list of 'destination_addresses' should still be in the same order as our address_list
+    
+    # addr_index = 0
+    # pull from db file
+    with open("addresses/db.csv") as tsv:
+        for line in csv.reader(tsv, dialect="excel-tab"):
+        
+            f_name = filename[:-4] # remove ".csv"
+            suburb = f_name.split("/")[1].split("_")[0]
+        
+        
+            # print(suburb)
+            # print(line[i_suburb])
+            # store only if suburb matches file called
+            if line[i_suburb] != suburb:
+                print("{} != {} for file {}".format(line[i_suburb], suburb,filename))
+                print(f_name.split("/")[1].split("_")[0])
+                continue
+                
+            print("SUBURB FOUND: ",suburb)
+        
+            row = {}
+            row["name"] = line[i_name]
+            row["zid"] = line[i_zid]
+            row["email"] = line[i_email]
+            row["phone"] = line[i_phone]
+            row["order_beige"] = line[i_order_beige]
+            row["order_rose"] = line[i_order_rose]
+            row["order_shirt"] = line[i_order_shirt]
+            row["order_champ"] = line[i_order_champ]
+            row["human_address"] = line[i_address]
+            row["suburb"] = line[i_suburb]
+            
+            # get index of human_input
+            addr_index = 0
+            print("searching for ", line[i_address])
+            for a in addresses_list:
+                # if not a:
+                #     continue
+                if a == line[i_address]:
+                    break
+                addr_index += 1
+                
+            # if address not found, don't store
+            if addr_index == len(addresses_list):
+                print("address not found")
+                print("addresses_list = ", addresses_list)
+                print("line[i_address] = ", line[i_address])
+                continue
+            print(addr_index)
+            print(addresses_list)
+            # match that with index of API response
+            print(find_path_return['destination_addresses'])
+            row["API_address"] = find_path_return['destination_addresses'][addr_index]
+            
+            db[find_path_return['destination_addresses'][addr_index]] = row
+            
+            # db.append(row)
+            print(row)
+            
+            
+            # keep this at end xd
+            # if addr_index == 9:
+            #     continue
+            # addr_index += 1
+            # line.append()
+            
+            # if line[i_suburb] not in db:
+                # db[line[i_suburb]] = []
+            
+            # db[line[i_suburb]].append(line[i_address])
+    print("======================= DB ======================")
+    print(db)
+    print("======================= ========== ======================")
 
+    
     # print("==== addresses_str ====")
     # print(addresses_str)
     # print("==== find_path() return value ====")
@@ -90,16 +184,46 @@ def print_final_route(path, addr_list, trip_time):
     
     print("ETA = ", display_time(trip_time))
     print("Number of stops = ", len(path))
+    ordered_path = []
     for v in path:
-        print(addr_list[v])
+        # print(addr_list[v])
+        ordered_path.append(addr_list[v])
+        
+        API_addy = addr_list[v]
+        details = db[API_addy]
+        # address - name - order - mobile
+        output_str = "{} - {} - Ordered[".format(API_addy,details["name"])
+        
+        if details["order_beige"]:
+            output_str += "{} Sandy Beige hoodie - ".format(details["order_beige"])
+            
+        if details["order_rose"]:
+            output_str += "{} Dusty Rose hoodie - ".format(details["order_rose"])
+            
+        if details["order_shirt"]:
+            output_str += "{} Enoch Shirt - ".format(details["order_shirt"])
+            
+        if details["order_champ"]:
+            output_str += "{} Black Champion hoodie - ".format(details["order_champ"])
+            
+        output_str = output_str [:-3]
+        output_str += "] - {} - ({})".format(details["phone"],details["human_address"])
+        # output_str += details["phone"]
+        
+        
+        print(output_str)
+            
+        
 
     print("==================== END FINAL ROUTE =================")
 
     origin = addr_list[0].replace(' ','+')
-    addr_list = addr_list[1:]
+    ordered_path = ordered_path[1:]
+    
+    print(path)
 
     print("==================== URL FOR ROUTE ===================")
-    print("https://www.google.com/maps/dir/?api=1&origin=" + origin + "&waypoints=" + addresses_list_to_str(addr_list)[:-1])
+    print("https://www.google.com/maps/dir/?api=1&origin=" + origin + "&waypoints=" + addresses_list_to_str(ordered_path)[:-1])
 
     print("======================================================")
 
@@ -112,13 +236,15 @@ def get_addresses_str(filename):
     addresses_list = []
     with open(filename) as file:
         for line in file:
-            # print(line)
+            print(line)
             line = line.rstrip()
+            if not line:
+                continue
             addresses_list.append(line)
     
     addresses_str = addresses_list_to_str(addresses_list)
     
-    return addresses_str
+    return addresses_str,addresses_list
     
 # Convert list of addresses to Distance Matrix API parameter string
 def addresses_list_to_str(addr_list):
@@ -215,10 +341,11 @@ def find_path(addresses):
     except urllib.error.URLError:
         print("urllib.error.URLError happend :)")
         print(urllib.error.URLError)
+        exit(1)
     else:
         # if we didn't gte IOError, then parse the result
         result = json.load(response)
-        # print(result)
+        print(result)
         
     return result
 
