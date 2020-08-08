@@ -13,9 +13,9 @@ To run:
     * ~~CSV files should be passed in as a command line argument~~
 * ~~Parse input to fit api call~~
 * ~~Process API response to create 2d weighted graph (distances and locations from API response)~~
-* Find Hamiltonian circuit of each suburb
-    * Put hamiltonian functions in separate file?
-* Check results by hand
+* ~~Find Hamiltonian circuit of each suburb~~
+    * ~~Put hamiltonian functions in separate file~~
+* ~~Check results by hand~~
 
 
 # Notes
@@ -81,6 +81,11 @@ Each query sent to the Distance Matrix API generates elements, where the number 
 
 
 # Functions
+
+## print_final_route(path, addr_list, trip_time)
+Input: List of optimal path from start to end, List of addresses, Total trip time
+
+Output: ETA, Number of stops, (Address,Name,Order contents,Mobile) for each destination, and URL with route inputted into Google Maps
 
 ## get_addresses_str(filename)
 Input: Path to file (e.g. `addresses/blacktown.csv`)

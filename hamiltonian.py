@@ -64,7 +64,7 @@ def main():
     # read file and get addresses
     addresses_str,addresses_list = get_addresses_str(filename)
     
-    print(addresses_list)
+    # print(addresses_list)
         
     find_path_return = find_path(addresses_str)
     # find_path_return = {'destination_addresses': ['9 Lorikeet St, Glenwood NSW 2768, Australia', '3 Gympie Pl, Wakeley NSW 2176, Australia', 'Shop+8/45-47 Smart St, Fairfield NSW 2165, Australia', '80 Melbourne Rd, St Johns Park NSW 2176, Australia'], 'origin_addresses': ['9 Lorikeet St, Glenwood NSW 2768, Australia', '3 Gympie Pl, Wakeley NSW 2176, Australia', 'Shop+8/45-47 Smart St, Fairfield NSW 2165, Australia', '80 Melbourne Rd, St Johns Park NSW 2176, Australia'], 'rows': [{'elements': [{'distance': {'text': '1 m', 'value': 0}, 'duration': {'text': '1 min', 'value': 0}, 'status': 'OK'}, {'distance': {'text': '28.9 km', 'value': 28879}, 'duration': {'text': '28 mins', 'value': 1706}, 'status': 'OK'}, {'distance': {'text': '20.7 km', 'value': 20675}, 'duration': {'text': '32 mins', 'value': 1914}, 'status': 'OK'}, {'distance': {'text': '31.1 km', 'value': 31065}, 'duration': {'text': '28 mins', 'value': 1668}, 'status': 'OK'}]}, {'elements': [{'distance': {'text': '28.4 km', 'value': 28427}, 'duration': {'text': '28 mins', 'value': 1700}, 'status': 'OK'}, {'distance': {'text': '1 m', 'value': 0}, 'duration': {'text': '1 min', 'value': 0}, 'status': 'OK'}, {'distance': {'text': '6.1 km', 'value': 6083}, 'duration': {'text': '11 mins', 'value': 653}, 'status': 'OK'}, {'distance': {'text': '2.3 km', 'value': 2331}, 'duration': {'text': '5 mins', 'value': 285}, 'status': 'OK'}]}, {'elements': [{'distance': {'text': '19.9 km', 'value': 19869}, 'duration': {'text': '32 mins', 'value': 1891}, 'status': 'OK'}, {'distance': {'text': '6.1 km', 'value': 6081}, 'duration': {'text': '11 mins', 'value': 660}, 'status': 'OK'}, {'distance': {'text': '1 m', 'value': 0}, 'duration': {'text': '1 min', 'value': 0}, 'status': 'OK'}, {'distance': {'text': '6.9 km', 'value': 6869}, 'duration': {'text': '13 mins', 'value': 759}, 'status': 'OK'}]}, {'elements': [{'distance': {'text': '31.3 km', 'value': 31346}, 'duration': {'text': '29 mins', 'value': 1723}, 'status': 'OK'}, {'distance': {'text': '2.5 km', 'value': 2516}, 'duration': {'text': '5 mins', 'value': 277}, 'status': 'OK'}, {'distance': {'text': '6.9 km', 'value': 6856}, 'duration': {'text': '12 mins', 'value': 737}, 'status': 'OK'}, {'distance': {'text': '1 m', 'value': 0}, 'duration': {'text': '1 min', 'value': 0}, 'status': 'OK'}]}], 'status': 'OK'}
@@ -74,28 +74,16 @@ def main():
         print("Error: ", find_path_return['status'])
         exit(1)
         
-    # correspond human inputted addresses with google maps version
-    # when we get response from API, list of 'destination_addresses' should still be in the same order as our address_list
-    
-    # addr_index = 0
-    # pull from db file
     with open("addresses/db.csv") as tsv:
         for line in csv.reader(tsv, dialect="excel-tab"):
         
             f_name = filename[:-4] # remove ".csv"
             suburb = f_name.split("/")[1].split("_")[0]
         
-        
-            # print(suburb)
-            # print(line[i_suburb])
             # store only if suburb matches file called
             if line[i_suburb] != suburb:
-                print("{} != {} for file {}".format(line[i_suburb], suburb,filename))
-                print(f_name.split("/")[1].split("_")[0])
                 continue
                 
-            print("SUBURB FOUND: ",suburb)
-        
             row = {}
             row["name"] = line[i_name]
             row["zid"] = line[i_zid]
@@ -110,74 +98,50 @@ def main():
             
             # get index of human_input
             addr_index = 0
-            print("searching for ", line[i_address])
+            # print("searching for ", line[i_address])
             for a in addresses_list:
-                # if not a:
-                #     continue
                 if a == line[i_address]:
                     break
                 addr_index += 1
                 
             # if address not found, don't store
             if addr_index == len(addresses_list):
-                print("address not found")
-                print("addresses_list = ", addresses_list)
-                print("line[i_address] = ", line[i_address])
+                # print("address not found")
+                # print("addresses_list = ", addresses_list)
+                # print("line[i_address] = ", line[i_address])
                 continue
-            print(addr_index)
-            print(addresses_list)
+            # print(addr_index)
+            # print(addresses_list)
             # match that with index of API response
-            print(find_path_return['destination_addresses'])
+            # print(find_path_return['destination_addresses'])
             row["API_address"] = find_path_return['destination_addresses'][addr_index]
             
             db[find_path_return['destination_addresses'][addr_index]] = row
             
-            # db.append(row)
-            print(row)
+            # print(row)
             
-            
-            # keep this at end xd
-            # if addr_index == 9:
-            #     continue
-            # addr_index += 1
-            # line.append()
-            
-            # if line[i_suburb] not in db:
-                # db[line[i_suburb]] = []
-            
-            # db[line[i_suburb]].append(line[i_address])
-    print("======================= DB ======================")
-    print(db)
-    print("======================= ========== ======================")
+   
+    # print("======================= DB ======================")
+    # print(db)
+    # print("======================= ========== ======================")
 
     
-    # print("==== addresses_str ====")
-    # print(addresses_str)
-    # print("==== find_path() return value ====")
-    # print(json.dumps(find_path_return, indent=4))
-    # print("==== matrix ====")
-    # print_matrix(find_path_return)
-    # print("==== matrix by time (seconds) ====")
-    # print(matrix_by_time(find_path_return))
-    # print("==== matrix by distance (metres) ====")
-    # print(matrix_by_distance(find_path_return))
-    # print("==== ==================== ====")
+    # ===== Creating graph G1 =====
+    G1 = Graph(find_path_return["destination_addresses"]) 
     
-    G1 = Graph(find_path_return["destination_addresses"])
+    # ===== UNCOMMENT DEPENDING ON DISTANCE OR TIME =====
     # G1.graph = matrix_by_distance(find_path_return)
     G1.graph = matrix_by_time(find_path_return)
-    # G1.hamCycle()
+    # ===================================================
+
 
     path,trip_time = G1.solve()
-    
     print_final_route(path,find_path_return["destination_addresses"],trip_time)
 
-
-    
     print("Laters.")
 
 
-
+# Prints details for final trip route
 def print_final_route(path, addr_list, trip_time):
     
     print("==================== FINAL ROUTE =================")
@@ -186,7 +150,6 @@ def print_final_route(path, addr_list, trip_time):
     print("Number of stops = ", len(path))
     ordered_path = []
     for v in path:
-        # print(addr_list[v])
         ordered_path.append(addr_list[v])
         
         API_addy = addr_list[v]
@@ -236,7 +199,7 @@ def get_addresses_str(filename):
     addresses_list = []
     with open(filename) as file:
         for line in file:
-            print(line)
+            # print(line)
             line = line.rstrip()
             if not line:
                 continue
@@ -267,7 +230,7 @@ def print_matrix(api_response):
     nodes = api_response["destination_addresses"]
     rows = api_response["rows"]
     
-    print(nodes)
+    # print(nodes)
     # print(json.dumps(rows, indent=4))
     
     
@@ -345,7 +308,7 @@ def find_path(addresses):
     else:
         # if we didn't gte IOError, then parse the result
         result = json.load(response)
-        print(result)
+        # print(result)
         
     return result
 
