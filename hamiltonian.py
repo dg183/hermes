@@ -54,10 +54,14 @@ db = {}
 
 def main():
     # check for correct cmd line arguments ("python3 hamiltonian.py csv_file")
-    if (len(sys.argv) != 2):
+    if (len(sys.argv) < 2 or len(sys.argv) > 3):
         print("Format: python3 hamiltonian.py <csv_file>")
         exit(1)
+        
     filename = sys.argv[1]
+    db_name = "addresses/db.csv"
+    if (len(sys.argv) == 3):
+        db_name = sys.argv[2]
     
     
     
@@ -74,7 +78,7 @@ def main():
         print("Error: ", find_path_return['status'])
         exit(1)
         
-    with open("addresses/db.csv") as tsv:
+    with open(db_name) as tsv:
         for line in csv.reader(tsv, dialect="excel-tab"):
         
             f_name = filename[:-4] # remove ".csv"
@@ -82,6 +86,8 @@ def main():
         
             # store only if suburb matches file called
             if line[i_suburb] != suburb:
+                print(suburb)
+                print(line[i_suburb])
                 continue
                 
             row = {}

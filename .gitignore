@@ -1,2 +1,5 @@
-/addresses/
 __pycache__
+addresses/
+!addresses/example_db.csv
+!addresses/prospect.csv
+

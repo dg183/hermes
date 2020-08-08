@@ -3,7 +3,7 @@
 Optimal route finder for multiple stops using the Google Maps API
 
 To run:
-`python3 hamiltonian.py addresses.csv`
+`python3 hamiltonian.py <suburb>.csv [optional database, default=addresses/db.csv]`
 
 # TODO
 
@@ -24,6 +24,8 @@ Drivers will depart from home and travel to each address within their surroundin
 
 Optimal path will be the path with shortest travel time. This path must create a circuit with the driver's home as the start and end location, passing through every delivery address at least once.
 
+
+
 ## API time complexity
 Given a list of `origins` and `destinations`, the API will return an array of distances between from each origin to each destination.
 
@@ -35,6 +37,20 @@ For our application, we have a list of locations, and want to find the optimal r
     * Suppose we have `n` addresses
     * Return array is size `n^2`
     * Time complexity = `O(n^2)`
+
+## Required files
+`addresses/db.csv` - Database of all orders and addresses
+* example [here](addresses/example_db.csv)
+* **TAB** separated values (TSV) file
+* Columns: Name, zID, Email, Phone, Beige size, Rose size, Shirt size, Champion hoodie size, Address, Suburb
+
+`addresses/<suburb>.csv` - List of addresses in route
+* example [here](addresses/prospect.csv)
+* **Limit of 10 addresses per CSV (limited by Distance Matrix API)**
+* Note: `suburb` in `<suburb>.csv` should match `suburb` field in `db.csv`
+
+# Have a go
+`python3 hamiltonian.py addresses/prospect.csv addresses/example_db.csv`
 
 ## Address input format
 Input from CSV files.
