@@ -5,17 +5,20 @@ Optimal route finder for multiple stops using the Google Maps API
 To run:
 `python3 hamiltonian.py <suburb>.csv [optional database, default=addresses/db.csv]`
 
-# TODO
+## Have a go
+`python3 hamiltonian.py addresses/prospect.csv addresses/example_db.csv`
 
-* ~~Get API key~~
-* ~~Read input of addresses (probably CSV file)~~
-    * ~~Multiple CSV files, separated by suburb~~
-    * ~~CSV files should be passed in as a command line argument~~
-* ~~Parse input to fit api call~~
-* ~~Process API response to create 2d weighted graph (distances and locations from API response)~~
-* ~~Find Hamiltonian circuit of each suburb~~
-    * ~~Put hamiltonian functions in separate file~~
-* ~~Check results by hand~~
+
+## Required files
+`addresses/db.csv` - Database of all orders and addresses
+* example [here](addresses/example_db.csv)
+* **TAB** separated values (TSV) file
+* Columns: Name, zID, Email, Phone, Beige size, Rose size, Shirt size, Champion hoodie size, Address, Suburb
+
+`addresses/<suburb>.csv` - List of addresses in route
+* example [here](addresses/prospect.csv)
+* **Limit of 10 addresses per CSV (limited by Distance Matrix API)**
+* Note: `suburb` in `<suburb>.csv` should match `suburb` field in `db.csv`
 
 
 # Notes
@@ -23,7 +26,6 @@ To run:
 Drivers will depart from home and travel to each address within their surrounding suburb.
 
 Optimal path will be the path with shortest travel time. This path must create a circuit with the driver's home as the start and end location, passing through every delivery address at least once.
-
 
 
 ## API time complexity
@@ -38,19 +40,6 @@ For our application, we have a list of locations, and want to find the optimal r
     * Return array is size `n^2`
     * Time complexity = `O(n^2)`
 
-## Required files
-`addresses/db.csv` - Database of all orders and addresses
-* example [here](addresses/example_db.csv)
-* **TAB** separated values (TSV) file
-* Columns: Name, zID, Email, Phone, Beige size, Rose size, Shirt size, Champion hoodie size, Address, Suburb
-
-`addresses/<suburb>.csv` - List of addresses in route
-* example [here](addresses/prospect.csv)
-* **Limit of 10 addresses per CSV (limited by Distance Matrix API)**
-* Note: `suburb` in `<suburb>.csv` should match `suburb` field in `db.csv`
-
-# Have a go
-`python3 hamiltonian.py addresses/prospect.csv addresses/example_db.csv`
 
 ## Address input format
 Input from CSV files.
