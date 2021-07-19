@@ -3,3 +3,6 @@ addresses/
 !addresses/example_db.csv
 !addresses/prospect.csv
 
+env/
+temp.json
+
