@@ -6,6 +6,25 @@ To run:
 `python3 hamiltonian.py <suburb>.csv [optional database, default=addresses/db.csv]`
 
 ## Have a go
+
+### Environment setup
+
+Generate virtual environment
+* `python3 -m venv env`
+
+Add API key to virtual environment
+* `vim env/bin/activate`
+* At the end of `deactivate()` function:
+    * `unset DISTANCE_MATRIX_API_KEY`
+* At the end of the file:
+    * `export DISTANCE_MATRIX_API_KEY="{insert API key}"`
+* Reference: https://stackoverflow.com/a/38645983
+
+Activate virtual environment
+* `source env/bin/activate`
+
+
+### Run script
 `python3 hamiltonian.py addresses/prospect.csv addresses/example_db.csv`
 
 

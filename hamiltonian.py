@@ -31,7 +31,7 @@ def display_time(seconds, granularity=2):
 # ===========================================
 
 # Get API key
-API_KEY = os.environ.get("API_KEY_HERMES",'')
+API_KEY = os.environ.get("DISTANCE_MATRIX_API_KEY",'')
 DIST_MATRIX_BASE_URL = "https://maps.googleapis.com/maps/api/distancematrix/json"
 
 
@@ -59,7 +59,7 @@ def main():
         exit(1)
         
     filename = sys.argv[1]
-    db_name = "addresses/db.csv"
+    db_name = "addresses/example_db.csv"
     if (len(sys.argv) == 3):
         db_name = sys.argv[2]
     
@@ -68,9 +68,10 @@ def main():
     # read file and get addresses
     addresses_str,addresses_list = get_addresses_str(filename)
     
-    # print(addresses_list)
+    print(addresses_str)
         
     find_path_return = find_path(addresses_str)
+    print(find_path_return)
 
     if find_path_return['status'] != 'OK':
         print("Error: ", find_path_return['status'])
@@ -301,7 +302,7 @@ def find_path(addresses):
     
     url = f"{DIST_MATRIX_BASE_URL}?{params}"
     
-    # print(url)
+    print(url)
     
     try:
         response = urllib.request.urlopen(url)
