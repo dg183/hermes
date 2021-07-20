@@ -10,7 +10,7 @@ class Google_DistMatrix:
         self.BASE_URL = "https://maps.googleapis.com/maps/api/distancematrix/json"
 
     # Given string formatted addresses, query Distance Matrix API for response
-    def GET_path(self, addresses):
+    def get_path(self, addresses):
         # join parts of the url into a single string
         params = urllib.parse.urlencode(
             {
