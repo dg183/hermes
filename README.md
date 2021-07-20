@@ -3,7 +3,7 @@
 Optimal route finder for multiple stops using the Google Maps API
 
 To run:
-`python3 hamiltonian.py <suburb>.csv [optional database, default=addresses/db.csv]`
+`python3 main.py <suburb>.csv [optional database, default=addresses/db.csv]`
 
 ## Have a go
 
@@ -25,7 +25,10 @@ Activate virtual environment
 
 
 ### Run script
-`python3 hamiltonian.py addresses/prospect.csv addresses/example_db.csv`
+`python3 main.py`
+
+Note: this will default to
+* `python3 hamiltonian.py addresses/prospect.csv addresses/example_db.csv`
 
 
 ## Required files
