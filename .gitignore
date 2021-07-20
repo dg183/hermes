@@ -2,6 +2,7 @@ __pycache__
 addresses/
 !addresses/example_db.csv
 !addresses/prospect.csv
+!addresses/example_db.tsv
 
 env/
 temp.json
