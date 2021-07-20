@@ -20,14 +20,14 @@ class Input:
                     continue
                 address_list.append(line) # append address to list
         
-        addresses_param_str = Input._address_list_to_param_str(address_list)
+        addresses_param_str = Input.address_list_to_param_str(address_list)
         
         return addresses_param_str, address_list
 
         
     # Convert list of addresses to Distance Matrix API parameter string
     @staticmethod
-    def _address_list_to_param_str(address_list):
+    def address_list_to_param_str(address_list):
         addr_str = ""
         
         for addr_line in address_list:
@@ -47,4 +47,4 @@ if __name__=="__main__":
     print(addresses_param_str)
 
     print("==== Addresses_list ====")
-    print(addresses_list)
+    print(address_list)
