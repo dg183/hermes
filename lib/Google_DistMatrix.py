@@ -10,7 +10,7 @@ class Google_DistMatrix:
         self.BASE_URL = "https://maps.googleapis.com/maps/api/distancematrix/json"
 
     # Given string formatted addresses, query Distance Matrix API for response
-    def get_path(self, addresses):
+    def get_matrix(self, addresses):
         # join parts of the url into a single string
         params = urllib.parse.urlencode(
             {
@@ -22,25 +22,20 @@ class Google_DistMatrix:
         )
         
         url = f"{self.BASE_URL}?{params}"
-        
-        print(url)
-        
+
         try:
             response = urllib.request.urlopen(url)
-        except urllib.error.URLError:
-            print("urllib.error.URLError happend :)")
-            print(urllib.error.URLError)
-            exit(1)
-        else:
-            # if we didn't get IOError, then parse the result
             result = json.load(response)
-            # print(result)
+        except Exception as e:
+            result = {
+                'status': e
+            }
             
         return result
 
 
     # DO NOT EDIT: Basic working version of Distance Matrix API
-    def find_path_base(self):
+    def find_matrix_base(self):
         # join parts of the url into a single string
         params = urllib.parse.urlencode(
             {
@@ -51,18 +46,16 @@ class Google_DistMatrix:
         )
         
         url = f"{self.BASE_URL}?{params}"
-        
-        print(url)
-        
+                
         try:
             response = urllib.request.urlopen(url)
-        except urllib.error.URLError:
-            print("urllib.error.URLError happend :)")
-            print(urllib.error.URLError)
-        else:
-            # if we didn't gte IOError, then parse the result
             result = json.load(response)
-            print(result)
+        except Exception as e:
+            result = {
+                'status': e
+            }
+            
+        return result
         
     # Given a response from the Distance Matrix API
     # Output the matrix of paths between each node
