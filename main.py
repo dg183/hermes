@@ -72,14 +72,24 @@ if __name__=='__main__':
     
     print(f"{addresses_param_str=}")
         
-    
+    # ===================================================================
+    # =                                                                 =
+    # =                 GET matrix from Google Maps API                 =
+    # =                                                                 =
+    # ===================================================================
     find_path_return = DM.GET_path(addresses_param_str)
     print(f"{find_path_return=}")
 
     if find_path_return['status'] != 'OK':
         print("Error: ", find_path_return['status'])
         exit(1)
-        
+    
+
+    # ===================================================================
+    # =                                                                 =
+    # =                 Populate users+address database                 =
+    # =                                                                 =
+    # ===================================================================
     with open(db_name) as tsv:
         first_line_passed = False
         for line in csv.reader(tsv, dialect="excel-tab"):
@@ -138,16 +148,36 @@ if __name__=='__main__':
     print("======================= ========== ======================")
 
     
-    # ===== Creating graph G1 =====
-    G1 = Graph(find_path_return["destination_addresses"]) 
-    
+    # ===================================================================
+    # =                                                                 =
+    # =                 Generate Graph for addresses                    =
+    # =                                                                 =
+    # ===================================================================
+    G1 = Graph(find_path_return["destination_addresses"])
+
+    # ===================================================================
+    # =                                                                 =
+    # =                 Populate graph with data                        =
+    # =                                                                 =
+    # ===================================================================
+
     # ===== UNCOMMENT DEPENDING ON DISTANCE OR TIME =====
     # G1.graph = matrix_by_distance(find_path_return)
     G1.graph = DM.matrix_by_time(find_path_return)
     # ===================================================
 
 
+    # ===================================================================
+    # =                                                                 =
+    # =               Solve for optimal hamiltonian circuit             =
+    # =                                                                 =
+    # ===================================================================
     path,trip_time = G1.solve()
-    Format.print_final_route(path, find_path_return["destination_addresses"], trip_time, database)
 
+    # ===================================================================
+    # =                                                                 =
+    # =                      Print finalised route                      =
+    # =                                                                 =
+    # ===================================================================
+    Format.print_final_route(path, find_path_return["destination_addresses"], trip_time, database)
     print("Laters.")
