@@ -8,6 +8,12 @@ from lib.Input import Input
 from lib.Format import Format
 
 if __name__=='__main__':
+    # ===================================================================
+    # =                                                                 =
+    # =                 Verify commandline arguments                    =
+    # =                                                                 =
+    # ===================================================================
+    
     # check for correct cmd line arguments ("python3 hamiltonian.py csv_file")
     argc = len(sys.argv)
     print(f"{argc=}")
@@ -57,13 +63,17 @@ if __name__=='__main__':
     i_suburb = 9
     
     
-    # read file and get addresses
+    # ===================================================================
+    # =                                                                 =
+    # =                      Read input from CSV                        =
+    # =                                                                 =
+    # ===================================================================
     addresses_param_str,address_list = Input.retrieve_addresses(filename)
     
     print(f"{addresses_param_str=}")
         
     
-    find_path_return = DM.find_path(addresses_param_str)
+    find_path_return = DM.GET_path(addresses_param_str)
     print(f"{find_path_return=}")
 
     if find_path_return['status'] != 'OK':
